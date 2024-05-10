@@ -1,0 +1,15 @@
+[package]
+name = "kontroller"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+steamworks-sys = "0.11"
+steamworks = "0.11"
+iced = {version = "0.10", features = ["smol"]}
+env_logger = { version = "0", default-features = false, features = [
+    "auto-color",
+    "humantime",
+] }
