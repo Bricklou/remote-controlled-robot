@@ -1,10 +1,6 @@
-use std::{
-  io::Write,
-  net::TcpStream,
-  sync::{mpsc, Mutex},
-  thread,
-  time::Duration,
-};
+use std::{sync::mpsc, thread, time::Duration};
+
+use rumqttc::{Client, MqttOptions, QoS};
 
 use crate::action_set::model::{ControllerAction, Movement};
 
@@ -25,15 +21,25 @@ where
   }
 }
 
+const TOPIC: &str = "robot";
+
 pub fn spawn(interval_ms: u64, rx: mpsc::Receiver<ControllerAction>) {
   thread::spawn(move || {
     let mut previous_movement = Movement::default();
     let mut previous_y_btn = false;
 
     println!("Trying to connect to robot");
-    let client_stream =
-      TcpStream::connect("192.168.31.128:4835").expect("Failed to connect to remote robot");
-    let client_stream = Mutex::new(client_stream);
+
+    let mut mqtt_options = MqttOptions::new("rumqtt-sync", "192.168.1.43", 1883);
+    mqtt_options.set_credentials("mosquitto", "mosquitto");
+    mqtt_options.set_keep_alive(Duration::from_secs(5));
+
+    let (client, mut connection) = Client::new(mqtt_options, 10);
+
+    thread::spawn(move || {
+      // Iterate to poll the eventloop for connection progress
+      for _ in connection.iter().enumerate() {}
+    });
 
     poll(interval_ms, || {
       let action = rx.recv().unwrap();
@@ -41,24 +47,33 @@ pub fn spawn(interval_ms: u64, rx: mpsc::Receiver<ControllerAction>) {
       match action {
         ControllerAction::Move(movement) => {
           if movement != previous_movement {
-            let mut stream = client_stream.lock().unwrap();
-            stream
-              .write_fmt(format_args!("move {:.3} {:.3}\n", movement.x, movement.y))
-              .unwrap();
+            client
+              .publish(
+                TOPIC,
+                QoS::AtLeastOnce,
+                false,
+                format!("move {:.3} {:.3}", movement.x, movement.y),
+              )
+              .expect("Failed to publish message");
             previous_movement = movement;
           }
         }
         ControllerAction::Button(state) => {
           if state.y_button && state.y_button != previous_y_btn {
-            let mut stream = client_stream.lock().unwrap();
             println!("button Y pressed");
-            stream.write_fmt(format_args!("led\n")).unwrap();
+            let payload = vec![1; 10];
+            match client.publish(TOPIC, QoS::AtLeastOnce, false, payload) {
+              Ok(_) => log::info!("Message published successfully"),
+              Err(e) => {
+                log::error!("Failed to publish message: {:?}", e)
+              }
+            }
           }
           previous_y_btn = state.y_button;
         }
       }
 
       None as Option<()> // run forever
-    });
+    })
   });
 }

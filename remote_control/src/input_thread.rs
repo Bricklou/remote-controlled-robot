@@ -95,7 +95,12 @@ pub fn spawn(
               x: data.x,
               y: data.y,
             });
-            network_tx.send(movement).unwrap();
+            match network_tx.send(movement) {
+              Ok(_) => {}
+              Err(err) => {
+                log::error!("Error: {:?}", err.0);
+              }
+            }
           }
         }
 
@@ -107,8 +112,12 @@ pub fn spawn(
             let pressed = ControllerAction::Button(ButtonState {
               y_button: data.bState,
             });
-
-            network_tx.send(pressed).unwrap();
+            match network_tx.send(pressed) {
+              Ok(_) => {}
+              Err(err) => {
+                log::error!("Error: {:?}", err.0);
+              }
+            }
           }
         }
         *update = false;
