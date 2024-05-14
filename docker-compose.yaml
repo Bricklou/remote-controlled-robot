@@ -1,0 +1,23 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    restart: always
+    volumes:
+      - ./docker/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./docker/passwd:/mosquitto/config/passwd
+      - data:/mosquitto/data
+      - log:/mosquitto/log
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+  mqttx:
+    image: emqx/mqttx-web
+    restart: always
+    ports:
+      - 9002:80
+
+volumes:
+  data:
+  log:
