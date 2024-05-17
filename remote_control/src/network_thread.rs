@@ -61,8 +61,7 @@ pub fn spawn(interval_ms: u64, rx: mpsc::Receiver<ControllerAction>) {
         ControllerAction::Button(state) => {
           if state.y_button && state.y_button != previous_y_btn {
             println!("button Y pressed");
-            let payload = vec![1; 10];
-            match client.publish(TOPIC, QoS::AtLeastOnce, false, payload) {
+            match client.publish(TOPIC, QoS::AtLeastOnce, false, "led") {
               Ok(_) => log::info!("Message published successfully"),
               Err(e) => {
                 log::error!("Failed to publish message: {:?}", e)
