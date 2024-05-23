@@ -17,7 +17,9 @@
 The game is simple, you have to control the robot using the SteamDeck's joysticks. The left joystick controls the robot's speed and direction, while the right joystick controls the robot's turret.
 
 Here is the video of the gameplay:
-https://github.com/Bricklou/remote-controlled-robot/assets/62793491/5a905e7d-b1fd-4edf-bab3-463ce0a7801a
+
+https://github.com/Bricklou/remote-controlled-robot/assets/62793491/651f6e76-3161-4fe4-a07c-ca98f164b27a
+
 
 ## 🚀 Getting started
 
