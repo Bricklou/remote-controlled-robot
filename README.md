@@ -70,8 +70,8 @@ To start the robot, you need to install Thonny and the ESP32 MicroPython firmwar
     <th><img  src="https://avatars.githubusercontent.com/u/94604758?v=4" width="115"><br><strong>@Aisamet</strong></th>
   </tr>
   <tr align="center">
-    <td><b>@dylan-power</b></td>
-    <td><b>@jvondermarck</b> </td>
-    <td><b>@NoahAldahan</b></td>
+    <td><b>Louis Bailleau</b></td>
+    <td><b>Julien Von Der Marck</b> </td>
+    <td><b>Isamet</b></td>
   </tr>
 </table>
