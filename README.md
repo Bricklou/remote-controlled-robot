@@ -1,4 +1,4 @@
-<h1 align="center"><img src="https://cdn.pixabay.com/photo/2021/03/05/22/44/dinosaur-6072475_960_720.png" width="224px"/><br/>
+<h1 align="center"><img src="https://github.com/Bricklou/remote-controlled-robot/assets/62793491/f1b08c22-28ef-4f42-9e2b-92bf3f641ef3" width="224px"/><br/>
   Mosquitto Roboto Steamo Docko
 </h1>
 <p align="center">The project is a small ESP32 wheeled robot remote controlled using an app on a SteamDeck</p>
